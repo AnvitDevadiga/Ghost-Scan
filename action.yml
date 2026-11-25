@@ -1,0 +1,38 @@
+name: 'Ghost-Scan'
+description: 'Scan AI-agent instruction files, skills and MCP configs for hidden Unicode, prompt injection and tool poisoning.'
+branding:
+  icon: eye
+  color: purple
+inputs:
+  path:
+    description: 'Path to scan'
+    default: '.'
+  fail-on:
+    description: 'Fail the job at or above this severity (low|medium|high|critical|none)'
+    default: 'high'
+  upload-sarif:
+    description: 'Upload results to GitHub code scanning (needs security-events: write)'
+    default: 'true'
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+    - name: Generate SARIF
+      shell: bash
+      env:
+        GS_PATH: ${{ inputs.path }}
+      run: node "${{ github.action_path }}/bin/ghostscan.js" "$GS_PATH" --sarif --fail-on none > ghostscan.sarif
+    - name: Upload to code scanning
+      if: inputs.upload-sarif == 'true'
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: ghostscan.sarif
+        category: ghost-scan
+    - name: Gate on findings
+      shell: bash
+      env:
+        GS_PATH: ${{ inputs.path }}
+        GS_FAIL_ON: ${{ inputs.fail-on }}
+      run: node "${{ github.action_path }}/bin/ghostscan.js" "$GS_PATH" --fail-on "$GS_FAIL_ON"

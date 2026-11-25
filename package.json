@@ -1,0 +1,41 @@
+{
+  "name": "ghost-scan",
+  "version": "0.1.0",
+  "description": "X-ray for the invisible text your AI agent obeys. Finds ASCII smuggling, hidden prompt injection, tool poisoning and risky MCP configs in AGENTS.md, SKILL.md, rules files and MCP configs.",
+  "type": "module",
+  "bin": {
+    "ghost-scan": "bin/ghostscan.js",
+    "ghostscan": "bin/ghostscan.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "examples",
+    "action.yml",
+    "index.html"
+  ],
+  "scripts": {
+    "test": "node examples/make-fixtures.mjs && node --test \"test/*.test.js\"",
+    "fixtures": "node examples/make-fixtures.mjs",
+    "demo": "node bin/ghostscan.js examples",
+    "serve": "npx --yes serve ."
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "prompt-injection",
+    "mcp",
+    "security",
+    "unicode",
+    "ascii-smuggling",
+    "llm",
+    "claude",
+    "cursor",
+    "sarif",
+    "supply-chain"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,4 @@
+# Docs and fixtures intentionally contain attack strings.
+README.md
+test/
+examples/
